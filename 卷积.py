@@ -10,4 +10,4 @@ xt = exp(-t0)
 ht = (r1 * exp(a *(t-t0)) + r2 * exp(b*(t-t0)))
 
 y = integrate(xt * ht,(t0,0,t))
-y
+pprint(y)
