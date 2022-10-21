@@ -1,4 +1,7 @@
-﻿using System;
+﻿//引入namespace
+using System;
+//本namespace提供了list数组类
+using System.Collections.Generic;
 
 namespace MyApp // Note: actual namespace depends on the project name.
 {
@@ -8,6 +11,22 @@ namespace MyApp // Note: actual namespace depends on the project name.
         {
             int a;
             int b;
+            //数组定义方式，与C不同
+            string[] names = {
+                "jobs",
+                "cook",
+                "nahida"
+            };
+            //定义一个空数组，预定义后不能更改长度
+            string[] movies = new string[4];
+            //定义一个list
+            List<string> newList = new List<string>();
+            //向list中添加、删除项
+            newList.Add("a");
+            newList.Remove("a");
+            //显示list中项的数目
+            a = newList.Count;
+
             Console.Write("input:");
             //用户可能输入任何东西，所以得加上错误转换
             a = Convert.ToInt32(Console.ReadLine());
