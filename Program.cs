@@ -5,8 +5,18 @@ using System.Collections.Generic;
 
 namespace MyApp // Note: actual namespace depends on the project name.
 {
+    //声明一个类，public可以外部访问，private不能（默认）
+    //static关键字可以在一次运行后继续计数
+    class cat{
+        public string? name;
+        public int age;
+
+        public void meow(){
+            Console.WriteLine("meow!");
+        }
+    }
     internal class Program
-    {
+    {   
         static void Main(string[] args)
         {
             int a;
@@ -19,6 +29,9 @@ namespace MyApp // Note: actual namespace depends on the project name.
             };
             //定义一个空数组，预定义后不能更改长度
             string[] movies = new string[4];
+            //实例化一个类以及设置属性
+            cat cat1 = new cat();
+            cat1.age = 12;
             //定义一个list
             List<string> newList = new List<string>();
             //向list中添加、删除项
@@ -32,7 +45,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
             a = Convert.ToInt32(Console.ReadLine());
             Console.Write("input second number:");
             b = Convert.ToInt32(Console.ReadLine());
-            int res = a * b;
+            int res = multiply(a, b);
             Console.WriteLine("res = " + res);
 
             //命令行打印
@@ -47,6 +60,10 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
             //关闭程序前悬停
             Console.ReadKey();
+        }
+        //函数定义
+        static int multiply(int a, int b){
+            return a * b;
         }
     }
 }
