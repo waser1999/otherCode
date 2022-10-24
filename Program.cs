@@ -8,9 +8,6 @@ namespace MyApp // Note: actual namespace depends on the project name.
     //声明一个类，public可以外部访问，private不能（默认）
     //static关键字可以在一次运行后继续计数
     class cat{
-        public string? name;
-        public int age;
-
         public void meow(){
             Console.WriteLine("meow!");
         }
@@ -31,7 +28,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
             string[] movies = new string[4];
             //实例化一个类以及设置属性
             cat cat1 = new cat();
-            cat1.age = 12;
+            cat1.meow();
             //定义一个list
             List<string> newList = new List<string>();
             //向list中添加、删除项
