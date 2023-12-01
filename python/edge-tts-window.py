@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import edge_tts as tts
 import os
 
@@ -28,13 +29,17 @@ ttk.Label(frmChoose, text="输出文件名：").pack(anchor="w")
 entry = ttk.Entry(frmChoose)
 entry.pack(anchor="w")
 
+
 # Button 方法
 def tts():
     textToRead = text.get(1.0, "end").strip()
     speakerChosen = speaker.get()
-    name = entry.get().strip() + ".mp3"
+    route = os.path.abspath(os.path.dirname(__file__))
+    name = route + "\\" + entry.get().strip() + ".mp3"
     cmd = "python -m edge_tts -v " + speakerChosen + " -t " + textToRead + " --write-media " + name.strip()
     res = os.system(cmd)
+    if(res == 0):
+        messagebox.showinfo(title="消息提示", message="成功合成。")
 
 ttk.Button(root, text="合成", command=tts).pack()
 
