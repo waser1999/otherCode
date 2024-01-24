@@ -34,17 +34,6 @@ namespace p1_2{
             }
             return minDistance;
         }
-
-        // static void Main(){
-        //     string? s = Console.ReadLine();
-        //     int N;
-        //     if(int.TryParse(s, out int result)){
-        //         N = result;
-        //     }else{
-        //         N = 0;
-        //     }
-        //     Console.WriteLine(minDistance(N));
-        // }
     }
     class VisualCounter{
         private int num;
@@ -70,13 +59,6 @@ namespace p1_2{
             }
             return counter;
         }
-
-        // static void Main(){
-        //     VisualCounter visualCounter = new VisualCounter(3, 8);
-        //     visualCounter.add();
-        //     int res = visualCounter.add();
-        //     Console.WriteLine(res);
-        // }
     }
     class Date{
         public struct Day{
@@ -115,33 +97,6 @@ namespace p1_2{
         //构造函数继承
         public Transaction(int year, int month, int day): base(year, month, day){
 
-        }
-        //重写系统方法
-        public override bool Equals(object obj)
-        {
-            //
-            // See the full list of guidelines at
-            //   http://go.microsoft.com/fwlink/?LinkID=85237
-            // and also the guidance for operator== at
-            //   http://go.microsoft.com/fwlink/?LinkId=85238
-            //
-            
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-            
-            // TODO: write your implementation of Equals() here
-            throw new System.NotImplementedException();
-            return base.Equals (obj);
-        }
-        
-        // override object.GetHashCode
-        public override int GetHashCode()
-        {
-            // TODO: write your implementation of GetHashCode() here
-            throw new System.NotImplementedException();
-            return base.GetHashCode();
         }
     }
 }
