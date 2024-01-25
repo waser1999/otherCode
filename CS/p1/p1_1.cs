@@ -46,10 +46,4 @@ namespace p1{
             return a;
         }
     }
-    //执行类
-    class Test{
-        static void Main(){
-            Answer.primal(5);
-        }
-    }
 }

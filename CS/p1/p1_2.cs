@@ -1,9 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
+﻿namespace p1;
 
-namespace p1_2{
+public class Class1
+{
     class Point2D{
         //构造点对象
         public struct Point{
