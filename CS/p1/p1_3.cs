@@ -32,6 +32,7 @@ public class Stack<T> : IEnumerable<T?>
     }
     //定义节点指针
     protected Node? head;
+    protected Node? tail;
     protected Node? pointer;
     protected int N;
 
@@ -42,6 +43,9 @@ public class Stack<T> : IEnumerable<T?>
         node.item = item;
         head = node;
         N++;
+        if(N == 1){
+            tail = head;
+        }
     }
 
     public T? pop()
@@ -84,7 +88,7 @@ public class Stack<T> : IEnumerable<T?>
     }
 
 }
-public class Link<T>: Stack<T>{
+public class Deque<T>: Stack<T>{
     public T? deleteTail(){
         pointer = head;
         T? res;
@@ -113,6 +117,17 @@ public class Link<T>: Stack<T>{
         pointer.next = pointer.next.next;
         N--;
         return res;
+    }
+    public void enquene(T? element){
+        if(N == 0) {
+            push(element);
+        }else{
+            Node node = new Stack<T>.Node();
+            node.item = element;
+            tail.next = node;
+            tail = node;
+            N++;
+        }
     }
 }
 public class ArrayQuene<T>: IEnumerable<T?>
@@ -169,6 +184,46 @@ public class ArrayQuene<T>: IEnumerable<T?>
     IEnumerator IEnumerable.GetEnumerator()
     {
         throw new NotImplementedException();
+    }
+}
+public class CircleQuene<T>{
+    protected class Node
+    {
+        public T? item;
+        public Node? next;
+    }
+    private Node? last;
+    private int N;
+    public bool isEmpty(){
+        return N == 0;
+    }
+    public int size(){
+        return N;
+    }
+    public void enquene(T? element){
+        Node node = new Node();
+        node.item = element;
+        if(N == 0){
+            last = node;
+            node.next = last;
+        }else{
+            node.next = last.next;
+            last.next = node;
+            last = node;
+        }
+        N++;
+    }
+    public T? dequene(){
+        T? res;
+        if(N == 1){
+            res = last.item;
+            last = null;
+        }else{
+            res = last.next.item;
+            last.next = last.next.next;
+        }
+        N--;
+        return res;
     }
 }
 class StringCopy
@@ -373,7 +428,8 @@ class Test{
         Link<int> ints = new Link<int>();
         ints.push(10);
         ints.push(20);
-        ints.push(30);
-        Console.WriteLine(FindLink.max(ints));
+        ints.enquene(30);
+        ints.enquene(50);
+        Console.WriteLine(ints.pop());
     }
 }
