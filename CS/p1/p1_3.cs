@@ -43,7 +43,8 @@ public class Stack<T> : IEnumerable<T?>
         node.item = item;
         head = node;
         N++;
-        if(N == 1){
+        if (N == 1)
+        {
             tail = head;
         }
     }
@@ -88,16 +89,20 @@ public class Stack<T> : IEnumerable<T?>
     }
 
 }
-public class Deque<T>: Stack<T>{
-    public T? deleteTail(){
+public class Link<T> : Stack<T>
+{
+    public T? deleteTail()
+    {
         pointer = head;
         T? res;
-        if(pointer == null) return default;
-        if(pointer.next == null){
+        if (pointer == null) return default;
+        if (pointer.next == null)
+        {
             res = pop();
             return res;
         }
-        while(pointer.next!.next != null){
+        while (pointer.next!.next != null)
+        {
             pointer = pointer.next;
         }
         res = pointer.next.item;
@@ -105,12 +110,14 @@ public class Deque<T>: Stack<T>{
         N--;
         return res;
     }
-    public T? delete(int k){
+    public T? delete(int k)
+    {
         pointer = head;
-        if(k > N) return default;
-        if(k == 1) return pop();
-        if(k == N) return deleteTail();
-        for(int i = 0; i < k - 2; i++){
+        if (k > N) return default;
+        if (k == 1) return pop();
+        if (k == N) return deleteTail();
+        for (int i = 0; i < k - 2; i++)
+        {
             pointer = pointer!.next;
         }
         T? res = pointer.next.item;
@@ -118,10 +125,14 @@ public class Deque<T>: Stack<T>{
         N--;
         return res;
     }
-    public void enquene(T? element){
-        if(N == 0) {
+    public void enquene(T? element)
+    {
+        if (N == 0)
+        {
             push(element);
-        }else{
+        }
+        else
+        {
             Node node = new Stack<T>.Node();
             node.item = element;
             tail.next = node;
@@ -130,7 +141,7 @@ public class Deque<T>: Stack<T>{
         }
     }
 }
-public class ArrayQuene<T>: IEnumerable<T?>
+public class ArrayQuene<T> : IEnumerable<T?>
 {
     private static int N = 2;
     private T[] quene = new T[N];
@@ -145,12 +156,14 @@ public class ArrayQuene<T>: IEnumerable<T?>
     }
     public void enquene(T element)
     {
-        
+
         quene[num] = element;
         num++;
-        if(num * 4 >= N){
+        if (num * 4 >= N)
+        {
             T[] temp = new T[N * 2];
-            for(int i = 0; i < num; i++){
+            for (int i = 0; i < num; i++)
+            {
                 temp[i] = quene[i];
             }
             //将新数组的地址传给老数组
@@ -160,7 +173,7 @@ public class ArrayQuene<T>: IEnumerable<T?>
     }
     public T? dequene()
     {
-        if(isEmpty()) return default;
+        if (isEmpty()) return default;
         T? res = quene[0];
         for (int i = 1; i < N - 1; i++)
         {
@@ -169,14 +182,16 @@ public class ArrayQuene<T>: IEnumerable<T?>
         num--;
         return res;
     }
-    public T? GetValue(int index){
+    public T? GetValue(int index)
+    {
         return quene[index - 1];
     }
 
     public IEnumerator<T?> GetEnumerator()
     {
-        if(num == 0) yield return default;
-        for(int i = 0; i < num; i++){
+        if (num == 0) yield return default;
+        for (int i = 0; i < num; i++)
+        {
             yield return quene[i];
         }
     }
@@ -186,7 +201,8 @@ public class ArrayQuene<T>: IEnumerable<T?>
         throw new NotImplementedException();
     }
 }
-public class CircleQuene<T>{
+public class CircleQuene<T>
+{
     protected class Node
     {
         public T? item;
@@ -194,31 +210,41 @@ public class CircleQuene<T>{
     }
     private Node? last;
     private int N;
-    public bool isEmpty(){
+    public bool isEmpty()
+    {
         return N == 0;
     }
-    public int size(){
+    public int size()
+    {
         return N;
     }
-    public void enquene(T? element){
+    public void enquene(T? element)
+    {
         Node node = new Node();
         node.item = element;
-        if(N == 0){
+        if (N == 0)
+        {
             last = node;
             node.next = last;
-        }else{
+        }
+        else
+        {
             node.next = last.next;
             last.next = node;
             last = node;
         }
         N++;
     }
-    public T? dequene(){
+    public T? dequene()
+    {
         T? res;
-        if(N == 1){
+        if (N == 1)
+        {
             res = last.item;
             last = null;
-        }else{
+        }
+        else
+        {
             res = last.next.item;
             last.next = last.next.next;
         }
@@ -230,8 +256,9 @@ class StringCopy
 {
     private static Stack<string> temp = new Stack<string>();
     private static Stack<string> strings = new Stack<string>();
+    private static ArrayQuene<string> arrayQuene = new ArrayQuene<string>();
 
-    public static Stack<string> Copy(Stack<string> stack)
+    public static Stack<string> stackCopy(Stack<string> stack)
     {
         foreach (string? c in stack)
         {
@@ -244,35 +271,52 @@ class StringCopy
         }
         return strings;
     }
+    public static ArrayQuene<string> queneCopy(ArrayQuene<string> quene)
+    {
+        foreach (string? c in quene)
+        {
+            arrayQuene.enquene(c);
+        }
+        return arrayQuene;
+    }
 }
-class FindLink{
-    public static bool Find(Link<string> link, string s){
+class FindLink
+{
+    public static bool Find(Link<string> link, string s)
+    {
         int size = link.size();
-        foreach(string? c in link){
-            if(s.Equals(c)){
+        foreach (string? c in link)
+        {
+            if (s.Equals(c))
+            {
                 return true;
             }
         }
         return false;
     }
-    public static void remove(Link<string> link, string key){
+    public static void remove(Link<string> link, string key)
+    {
         int count = 1;
-        foreach(string? c in link){
-            if(key.Equals(c)){
+        foreach (string? c in link)
+        {
+            if (key.Equals(c))
+            {
                 link.delete(count);
             }
             count++;
         }
     }
-    public static int max(Link<int> link){
-        if(link == null) return 0;
+    public static int max(Link<int> link)
+    {
+        if (link == null) return 0;
         int max = 0;
-        foreach(int c in link){
-            if(c > max) max = c;
+        foreach (int c in link)
+        {
+            if (c > max) max = c;
         }
         return max;
     }
-    
+
 }
 class Parentheses
 {
@@ -415,21 +459,130 @@ class Fix
         }
         return int.Parse(operand.pop());
     }
-
 }
-class Test{
-    static void Main(){
-        // Link<string> ints = new Link<string>();
-        // ints.push("10");
-        // ints.push("20");
-        // ints.push("30");
-        // FindLink.remove(ints, "30");
-        // Console.WriteLine(FindLink.Find(ints, "30"));
-        Link<int> ints = new Link<int>();
-        ints.push(10);
-        ints.push(20);
-        ints.enquene(30);
-        ints.enquene(50);
-        Console.WriteLine(ints.pop());
+class Answer3
+{
+    public static string Josephus(int N, int M)
+    {
+        //C#自带栈与队列，直接用即可
+        Queue<int> ints = new Queue<int>();
+        string s = "";
+
+        for (int i = 0; i < N; i++)
+        {
+            ints.Enqueue(i);
+        }
+
+        while (ints.Count != 0)
+        {
+            for (int i = 0; i < M - 1; i++)
+            {
+                ints.Enqueue(ints.Dequeue());
+            }
+            s += ints.Dequeue() + " ";
+        }
+        return s;
+    }
+    public static bool legalStack(string[] strings)
+    {
+        int head = 0;
+        foreach (string s in strings)
+        {
+            if (s.Equals("-"))
+            {
+                head--;
+            }
+            else
+            {
+                head++;
+            }
+            if (head < 0) return false;
+        }
+        return true;
+    }
+}
+public class Deque<T> : IEnumerable<T?>
+{
+    protected class Node
+    {
+        public T? item;
+        public Node? next;
+        public Node? previous;
+    }
+    //定义节点指针
+    protected Node? left;
+    protected Node? right;
+    protected int N;
+
+    public void pushLeft(T? item)
+    {
+        Node node = new Node();
+        node.item = item;
+        if(N == 0){
+            left = node;
+            right = node;
+        }else{
+            node.next = left;
+            left.previous = node;
+            left = node;
+        }
+        N++;
+    }
+
+    public void pushRight(T? item)
+    {
+        Node node = new Node();
+        node.item = item;
+        if(N == 0){
+            left = node;
+            right = node;
+        }else{
+            node.previous = right;
+            right.next = node;
+            right = node;
+        }
+        N++;
+    }
+
+    public T? popLeft()
+    {
+        T? item = left.item;
+        Node node = new Node();
+        node = left.next;
+        left.next = null;
+        left = node;
+        left.previous = null;
+        return item;
+    }
+    public T? popRight()
+    {
+        T? item = right.item;
+        Node node = new Node();
+        node = right.previous;
+        right.previous = null;
+        right = node;
+        right.next = null;
+        return item;
+    }
+    public bool isEmpty()
+    {
+        return N == 0;
+    }
+    public int size()
+    {
+        return N;
+    }
+
+    public IEnumerator<T?> GetEnumerator()
+    {
+        for(int i = 0; i < N; i++){
+            yield return left.item;
+            left = left.next;
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        throw new NotImplementedException();
     }
 }
