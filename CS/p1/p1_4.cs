@@ -5,10 +5,8 @@ namespace p1;
 public class Search
 {
     //二分查找输入数组必须有序
-    public static int binarySearch(int num, int[] ints)
+    public static int binarySearch(int num, int[] ints, int low, int high)
     {
-        int low = 0;
-        int high = ints.Length - 1;
         while (low <= high)
         {
             int mid = low + (high - low) / 2;
@@ -27,10 +25,8 @@ public class Search
         }
         return -1;
     }
-    public static int binaryRightSearch(int num, int[] ints)
+    public static int binaryRightSearch(int num, int[] ints, int low, int high)
     {
-        int low = 0;
-        int high = ints.Length - 1;
         while (low <= high)
         {
             int mid = low + (high - low) / 2;
@@ -115,42 +111,12 @@ public class Search
                 break;
             }
         }
-        high = maxPos;
-        while (low <= high)
-        {
-            int mid = low + (high - low) / 2;
-            if (n < a[mid])
-            {
-                high = mid - 1;
-            }
-            else if (n > a[mid])
-            {
-                low = mid + 1;
-            }
-            else
-            {
-                return true;
-            }
+
+        if(binarySearch(n, a, low, maxPos) == -1 && binaryRightSearch(n, a, maxPos, high) == -1){
+            return false;
+        }else{
+            return true;
         }
-        low = maxPos;
-        high = a.Length - 1;
-        while (low <= high)
-        {
-            int mid = low + (high - low) / 2;
-            if (n > a[mid])
-            {
-                high = mid - 1;
-            }
-            else if (n < a[mid])
-            {
-                low = mid + 1;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        return false;
     }
     class Sum
     {
@@ -164,7 +130,7 @@ public class Search
                 {
                     for (int k = j + 1; k < len; k++)
                     {
-                        if (Search.binarySearch(-ints[i] - ints[j] - ints[k], ints) > k)
+                        if (Search.binarySearch(-ints[i] - ints[j] - ints[k], ints, 0, ints.Length) > k)
                         {
                             count++;
                         }
@@ -196,7 +162,7 @@ public class Search
             int[] ints = {1, 2, 3, 4, -1, -2, -3};
             double[] doubles = { -5.2, 9.4, 20, -10, 21.1, 40, 50, -20 };
             // Array.Sort(ints);
-            Console.WriteLine(Search.findInt(ints, 2));
+            Console.WriteLine(Search.findInt(ints, -2));
         }
     }
 }
