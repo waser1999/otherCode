@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Security.Cryptography.X509Certificates;
 
 namespace p1;
 
@@ -129,22 +130,72 @@ public class WeightedQuickUnionUF: QuickUnionUF{
         return size[base.Find(p)];
     }
 }
+public class LinkWQuickUnion{
+    public class Node{
+        public int item;
+        public int size = 1;
+        public Node? nextLink;
+        public Node? nextRoot;
+    }
+    //树的个数
+    private int count;
+    private int num;
+    private Node? head;
+
+    public LinkWQuickUnion(int n){
+        num = n;
+        for(int i = 0; i < n; i++){
+            Node node = new Node();
+            node.item = i;
+            node.nextLink = head;
+            node.nextRoot = node;
+            count++;
+            head = node;
+        }
+        
+    }
+    public int Count(){
+        return count;
+    }
+    public bool Connected(int p, int q){
+        return Find(p).Equals(Find(q));
+    }
+    public Node? Find(int k){
+        Node? item = head;
+        if(item == null) return default;
+        for(int i = 0; i < num - 1 - k; i++){
+            item = item.nextLink;
+        }
+
+        while(item != item.nextRoot){
+            item = item.nextRoot;
+        }
+        return item;
+    }
+    public void Union(int p, int q){
+        Node? pRoot = Find(p);
+        Node? qRoot = Find(q);
+
+        if(pRoot.Equals(qRoot)) return;
+
+        if(pRoot.size <= qRoot.size){
+            pRoot.nextRoot = qRoot;
+            qRoot.size += pRoot.size;
+        }else{
+            qRoot.nextRoot = pRoot;
+            pRoot.size += qRoot.size;
+        }
+        count--;
+    }
+}
 class Test{
     public static int ErdosRenyi(int N){
-        WeightedQuickUnionUF weightedQuickUnionUF = new WeightedQuickUnionUF(N);
-        Random random = new Random();
-        int step = 0;
-        while(weightedQuickUnionUF.Count() > 1){
-            int p = random.Next(0, N);
-            int q = random.Next(0, N);
-            if(!weightedQuickUnionUF.Connected(p, q)){
-                weightedQuickUnionUF.Union(p, q);
-                step++;
-            }
-        }
-        return step;
+        LinkWQuickUnion linkWQuickUnion = new LinkWQuickUnion(N);
+        linkWQuickUnion.Union(2,3);
+        linkWQuickUnion.Union(3,4);
+        return linkWQuickUnion.Count();
     }
     static void Main(){
-        Console.WriteLine(ErdosRenyi(200));
+        Console.WriteLine(ErdosRenyi(10));
     }
 }
