@@ -94,11 +94,4 @@ public class ArraySort
             }
         }
     }
-    static void Main(){
-        int[] ints = {3, 6, 1, 0, 4, 7, 9, 18, 87, 34, 23};
-        ArraySort.InsertSortWithoutExchange(ints);
-        for(int i = 0; i < ints.Length; i++){
-            Console.Write(ints[i] + " ");
-        }
-    }
 }
