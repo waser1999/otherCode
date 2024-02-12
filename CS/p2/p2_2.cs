@@ -401,10 +401,4 @@ public class LinkMergeSort{
             a = a.next;
         }
     }
-    static void Main(){
-        Link link = new Link();
-        int[] ints = {2, 5, 9, 3, 1, 11};
-        link.AddArray(ints);
-        PrintIEnumerable(LinkSort(link.head));
-    }
 }
