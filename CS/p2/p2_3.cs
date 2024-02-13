@@ -2,45 +2,48 @@
 
 public class QuickSort
 {
-    public static void Exchange(int[] a, int i, int j){
-        int temp = a[i];
+    public static void Exchange(IComparable[] a, int i, int j){
+        IComparable temp = a[i];
         a[i] = a[j];
         a[j] = temp;
     }
-    public static void Sort(int[] a){
+    public static void Sort(IComparable[] a){
         if(a.Length < 2) return;
         Random random = new Random();
-        random.Shuffle(a);
+        random.Shuffle<IComparable>(a);
 
         Sort(a, 0, a.Length - 1);
     }
-    public static void Sort(int[] a, int low, int high){
+    public static void Sort(IComparable[] a, int low, int high){
         if(low >= high) return;
         int mid = Partition(a, low, high);
         Sort(a, low, mid - 1);
         Sort(a, mid + 1, high);
     }
-    public static int Partition(int[] a, int low, int high){
+    public static int Compare(IComparable a, IComparable b){
+        return a.CompareTo(b);
+    }
+    public static int Partition(IComparable[] a, int low, int high){
         int midIndex = low + (high - low) / 2;
-        int mid = a[midIndex];
+        IComparable mid = a[midIndex];
         int left = low;
         int right = high + 1;
 
-        if(a[low] > mid){
+        if(Compare(a[low], mid) > 0){
             Exchange(a, low, midIndex);
         }
-        if(a[low] > a[high]){
+        if(Compare(a[low], a[high]) > 0){
             Exchange(a, low, high);
         }
-        if(mid > a[high]){
+        if(Compare(mid, a[high]) > 0){
             Exchange(a, midIndex, high);
         }
         midIndex = low;
         mid = a[midIndex];
 
         while(true){
-            while(a[++left] < mid);
-            while(a[--right] > mid);
+            while(Compare(a[++left], mid) < 0);
+            while(Compare(a[--right], mid) > 0);
             if(left >= right) break;
             Exchange(a, left, right);
         }
@@ -48,25 +51,26 @@ public class QuickSort
         midIndex = right;
         return midIndex;
     }
-    public static void Quick3Sort(int[] a){
+    public static void Quick3Sort(IComparable[] a){
         if(a.Length < 2) return;
         Random random = new Random();
         random.Shuffle(a);
         
         Quick3Sort(a, 0, a.Length - 1);
     }
-    public static void Quick3Sort(int[] a, int low, int high){
+    public static void Quick3Sort(IComparable[] a, int low, int high){
         if(low >= high) return;
         int vIndex = low;
-        int value = a[vIndex];
+        IComparable value = a[vIndex];
         int left = low;
         int i = low + 1;
         int right = high;
 
         while(i <= right){
-            if(a[i] < value){
+            int cmpRes =  Compare(a[i], value);
+            if(cmpRes < 0){
                 Exchange(a, i++, left++);
-            }else if(a[i] > value){
+            }else if(cmpRes > 0){
                 Exchange(a, i, right--);
             }else{
                 i++;
@@ -79,18 +83,19 @@ public class QuickSort
 }
 public class QuickSortPractice{
 
-    public static void TwoValuesSort(int[] a){
+    public static void TwoValuesSort(IComparable[] a){
         int low = 0;
         int high = a.Length - 1;
         int left = low;
         int right = high;
         int i = low + 1;
-        int value = a[0];
+        IComparable value = a[0];
 
         while(i <= high){
-            if(a[i] < value){
+            int cmpRes = QuickSort.Compare(a[i], value);
+            if(cmpRes < 0){
                 QuickSort.Exchange(a, i++, left++);
-            }else if(a[i] > value){
+            }else if(cmpRes > 0){
                 QuickSort.Exchange(a, i++, right--);
             }else{
                 i++;
@@ -98,16 +103,16 @@ public class QuickSortPractice{
         }
     }
     
-    private static void PrintIEnumerable(int[] a)
+    private static void PrintIEnumerable(IComparable[] a)
     {
-        foreach (int i in a)
+        foreach (IComparable i in a)
         {
             Console.Write(i + " ");
         }
         Console.WriteLine("\n");
     }
     static void Main(){
-        int[] ints = {0,0,0,1,2,4,0,2,1,0};
+        IComparable[] ints = {1, 5, 3, 7};
         QuickSort.Sort(ints);
         PrintIEnumerable(ints);
     }
