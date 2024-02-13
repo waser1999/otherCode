@@ -102,18 +102,12 @@ public class QuickSortPractice{
             }
         }
     }
-    
-    private static void PrintIEnumerable(IComparable[] a)
+        private static void PrintIEnumerable(IComparable[] a)
     {
         foreach (IComparable i in a)
         {
             Console.Write(i + " ");
         }
         Console.WriteLine("\n");
-    }
-    static void Main(){
-        IComparable[] ints = {1, 5, 3, 7};
-        QuickSort.Sort(ints);
-        PrintIEnumerable(ints);
     }
 }
