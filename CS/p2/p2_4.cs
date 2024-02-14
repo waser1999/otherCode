@@ -1,4 +1,6 @@
-﻿namespace p2;
+﻿using System.Collections;
+
+namespace p2;
 
 public interface IHeap
 {
@@ -10,8 +12,10 @@ public interface IHeap
 
 public class HeapSort : IHeap
 {
-    private IComparable[] heap;
-    private int N = 0;
+    protected IComparable[] heap;
+    protected int N = 0;
+    private IComparable? max;
+
     public HeapSort(int n)
     {
         heap = new IComparable[n + 1];
@@ -27,11 +31,11 @@ public class HeapSort : IHeap
         heap[i] = heap[j];
         heap[j] = temp;
     }
-    private int Compare(int i, int j)
+    protected int Compare(int i, int j)
     {
         return heap[i].CompareTo(heap[j]);
     }
-    private void Swim(int k)
+    protected virtual void Swim(int k)
     {
         while (k > 1 && Compare(k / 2, k) > 0)
         {
@@ -39,7 +43,7 @@ public class HeapSort : IHeap
             k = k / 2;
         }
     }
-    private void Sink(int k)
+    protected virtual void Sink(int k)
     {
         while (2 * k <= N)
         {
@@ -80,6 +84,10 @@ public class HeapSort : IHeap
         heap[++N] = element;
         if (N > heap.Length / 4) Resize();
         Swim(N);
+        
+        if(element.CompareTo(max) > 0){
+            max = element;
+        }
     }
     public IComparable DelMin()
     {
@@ -87,7 +95,51 @@ public class HeapSort : IHeap
         Exchange(1, N--);
         heap[N + 1] = null;
         Sink(1);
+        if(N == 0) max = null;
         return min;
+    }
+    public IComparable? Max(){
+        return max;
+    }
+}
+public class OptimizedHeapSort : HeapSort
+{
+    public OptimizedHeapSort(IComparable[] n) : base(n)
+    {
+    }
+    protected override void Swim(int k)
+    {
+        IComparable temp = heap[k];
+        bool isExchanged = false;
+
+        while(k > 1 && temp.CompareTo(heap[k/2]) < 0){
+            heap[k] = heap[k/2];
+            k = k/2;
+            isExchanged = true;
+        }
+        if(isExchanged){
+            heap[k] = temp;
+        }
+    }
+    protected override void Sink(int k)
+    {
+        IComparable temp = heap[k];
+        bool isExchanged = false;
+
+        while(2 * k <= N){
+            int j = 2 * k;
+            if(heap[j + 1] != null && Compare(j, j + 1) > 0) j++;
+            if(temp.CompareTo(heap[j]) > 0){
+                heap[k] = heap[j];
+                isExchanged = true;
+            }else{
+                break;
+            }
+            k = j;
+        }
+        if(isExchanged){
+            heap[k] = temp;
+        }
     }
 }
 public class ArrayHeapSort
@@ -272,4 +324,50 @@ public class Ans
         }
     }
     
+}
+public class FindMedian{
+    private PriorityQueue<int, int> smallHeap = new PriorityQueue<int, int>();
+    //大顶堆
+    private PriorityQueue<int, int> largeHeap = new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
+    private int N = 0;
+
+    public FindMedian(int[] ints){
+        for(int i = 0; i < ints.Length; i++){
+            Insert(ints[i]);
+        }
+    }
+
+    public void Insert(int a){
+        if(N == 0 || a < largeHeap.Peek()){
+            largeHeap.Enqueue(a, a);
+        }else{
+            smallHeap.Enqueue(a, a);
+        }
+
+        int temp;
+        if(largeHeap.Count > smallHeap.Count + 1){
+            temp = largeHeap.Dequeue();
+            smallHeap.Enqueue(temp, temp);
+        }else if(smallHeap.Count > largeHeap.Count + 1){
+            temp = smallHeap.Dequeue();
+            largeHeap.Enqueue(temp, temp);
+        }
+        N++;
+    }
+    public int GetMedian(){
+        if(largeHeap.Count == smallHeap.Count){
+            return (largeHeap.Peek() + smallHeap.Peek())/ 2;
+        }else if (largeHeap.Count > smallHeap.Count){
+            return largeHeap.Peek();
+        }else{
+            return smallHeap.Peek();
+        }
+    }
+    public int DeleteMedian(){
+        if (largeHeap.Count > smallHeap.Count){
+            return largeHeap.Dequeue();
+        }else{
+            return smallHeap.Dequeue();
+        }
+    }
 }
