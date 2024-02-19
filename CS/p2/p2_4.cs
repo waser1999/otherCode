@@ -25,7 +25,7 @@ public class HeapSort : IHeap
         heap = new IComparable[a.Length + 1];
         for (int i = 1; i <= a.Length; i++) Insert(a[i - 1]);
     }
-    private void Exchange(int i, int j)
+    protected void Exchange(int i, int j)
     {
         IComparable temp = heap[i];
         heap[i] = heap[j];
@@ -140,6 +140,51 @@ public class OptimizedHeapSort : HeapSort
         if(isExchanged){
             heap[k] = temp;
         }
+    }
+}
+public class FastHeapSort : HeapSort
+{
+    public FastHeapSort(int n) : base(n)
+    {
+    }
+    public FastHeapSort(IComparable[] a): base(a){
+    }
+    private int FindSwimTimes(int k){
+        int down = (int)Math.Log2(k) + 1;
+        int lowLevel = down;
+        int up = 1;
+        int middle;
+
+        while(down > up){
+            middle = up + (down - up) / 2;
+            //得到在该层的父节点地址
+            int middleIndex = k / (1 << (lowLevel - middle));
+            int compare = Compare(middleIndex, k);
+            if(compare > 0){
+                down = middle;
+            }else{
+                up = middle + 1;
+            }
+        }
+        return lowLevel - up;
+    }
+    protected override void Swim(int k)
+    {
+        int times = FindSwimTimes(k);
+        for(int i = 0; i < times; i++){
+            Exchange(k, k/2);
+            k = k/2;
+        }
+    }
+    static void Main(){
+        IComparable[] ints = {1,5,6,2,7,4,2,6, 54, 23, 87,13};
+        FastHeapSort fastHeapSort = new FastHeapSort(ints);
+        
+
+        for(int i = 0; i < ints.Length; i++){
+            Console.Write(fastHeapSort.DelMin() + " ");
+        }
+        
     }
 }
 public class ArrayHeapSort
@@ -330,7 +375,6 @@ public class FindMedian{
     //大顶堆
     private PriorityQueue<int, int> largeHeap = new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     private int N = 0;
-
     public FindMedian(int[] ints){
         for(int i = 0; i < ints.Length; i++){
             Insert(ints[i]);
