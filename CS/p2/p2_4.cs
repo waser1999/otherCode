@@ -176,16 +176,6 @@ public class FastHeapSort : HeapSort
             k = k/2;
         }
     }
-    static void Main(){
-        IComparable[] ints = {1,5,6,2,7,4,2,6, 54, 23, 87,13};
-        FastHeapSort fastHeapSort = new FastHeapSort(ints);
-        
-
-        for(int i = 0; i < ints.Length; i++){
-            Console.Write(fastHeapSort.DelMin() + " ");
-        }
-        
-    }
 }
 public class ArrayHeapSort
 {
@@ -413,5 +403,100 @@ public class FindMedian{
         }else{
             return smallHeap.Dequeue();
         }
+    }
+}
+public class IndexMinPQ{
+    private int N;
+    private IComparable[] keys;
+    private int[] pq;
+    private int[] qp;
+    public IndexMinPQ(int maxN){
+        keys = new IComparable[maxN + 1];
+        pq = new int[maxN + 1];
+        qp = new int[maxN + 1];
+        for(int i = 0; i <= maxN; i++){
+            qp[i] = -1;
+        }
+    }
+    public bool isEmpty(){
+        return N == 0;
+    }
+    public int Size(){
+        return N;
+    }
+    public bool Contains(int index){
+        return qp[index] != -1;
+    }
+    private void Exchange(int index1, int index2){
+        int temp = pq[index1];
+        pq[index1] = pq[index2];
+        pq[index2] = temp;
+
+        qp[pq[index1]] = index1;
+        qp[pq[index2]] = index2;
+    }
+    private int Compare(int index1, int index2){
+        return keys[pq[index1]].CompareTo(keys[pq[index2]]);
+    }
+    private void Swim(int k)
+    {
+        while (k > 1 && Compare(k / 2, k) > 0)
+        {
+            Exchange(k, k / 2);
+            k = k / 2;
+        }
+    }
+    protected virtual void Sink(int k)
+    {
+        while (2 * k <= N)
+        {
+            int j = 2 * k;
+            //排最小值null比一些值小
+            if (keys[pq[j]] != null && Compare(j, j + 1) > 0) j++;
+            if (Compare(k, j) > 0)
+            {
+                Exchange(k, j);
+            }
+            else
+            {
+                break;
+            }
+            k = j;
+        }
+    }
+    public void Insert(int index, IComparable element){
+        N++;
+        //注意，keys按index的位置放
+        keys[index] = element;
+        pq[N] = index;
+        qp[index] = N;
+        Swim(index);
+    }
+    public IComparable Min(){
+        return keys[pq[1]];
+    }
+    public int MinIndex(){
+        return pq[1];
+    }
+    public IComparable DelMinIndex(){
+        IComparable minIndex = pq[1];
+        Exchange(1, N--);
+        Sink(1);
+        keys[pq[N + 1]] = null;
+        qp[pq[N + 1]] = -1;
+        return minIndex;
+    }
+    public void Change(int index, IComparable value){
+        if(qp[index] == -1) return;
+        keys[index] = value;
+        Swim(qp[index]);
+        Sink(qp[index]);
+    }
+    public void Delete(int index){
+        Exchange(index, N--);
+        Swim(index);
+        Sink(index);
+        keys[pq[N + 1]] = null;
+        qp[pq[N + 1]] = -1;
     }
 }
