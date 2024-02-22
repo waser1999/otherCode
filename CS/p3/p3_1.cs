@@ -28,7 +28,16 @@ public class ArrayST<Value>
     }
     public Value? Get(IComparable key){
         for(int i = 0; i < N; i++){
-            if(keys[i].CompareTo(key) == 0) return values[i];
+            if(keys[i].CompareTo(key) == 0){
+                Value? value = values[i];
+                for(int j = i - 1; j >= 0; j--){
+                    keys[j + 1] = keys[j];
+                    values[j + 1] = values[j];
+                }
+                keys[0] = key;
+                values[0] = value;
+                return value;
+            }
         }
         return default(Value);
     }
@@ -191,8 +200,9 @@ public class ModifiedBinarySearchST<Value>{
         public int value;
     }
     private Item[] items;
-    public ModifiedBinarySearchST(IComparable[] keys, int[] values){
-        int len = keys.Length;
+    private int N;
+    public ModifiedBinarySearchST(IComparable[] keys, int[] values, int len){
+        N = keys.Length;
         items = new Item[len];
         for(int i = 0; i < len; i++){
             items[i] = new Item();
@@ -250,13 +260,21 @@ public class ModifiedBinarySearchST<Value>{
     public void Delete(IComparable key){
         int index = BinarySearch(key, 0, items.Length);
         if(index < items.Length && items[index].key.Equals(key)){
-            
+            for(int i = index; i < items.Length - 1; i++){
+                items[i] = items[i + 1];
+            }
+            items[--N] = null;
         }
+    }
+    public IComparable Floor(IComparable key){
+        int index = BinarySearch(key, 0, N);
+        if(items[index].key.CompareTo(key) != 0) index--;
+        return items[index].key;
     }
     public override string ToString()
     {
         string s = "";
-        for(int i = 0; i < items.Length; i++){
+        for(int i = 0; i < N; i++){
             s += "key:" + items[i].key + ", value:" + items[i].value + "\n";
         }
         return s;
@@ -266,7 +284,10 @@ public class Test{
     static void Main(){
         IComparable[] keys = {1, 3, 6, 8, 5, 9, 2};
         int[] values = {34, 22, 4, 5, 32, 55, 6};
-        ModifiedBinarySearchST<int> modifiedBinarySearchST = new ModifiedBinarySearchST<int>(keys, values);
-        Console.WriteLine(modifiedBinarySearchST);
+        ArrayST<int> arrayST = new ArrayST<int>(50);
+        arrayST.Put(1, 10);
+        arrayST.Put(2, 3);
+        arrayST.Put(3, 24);
+        Console.WriteLine(arrayST.Get(3));
     }
 }
