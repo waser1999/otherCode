@@ -280,14 +280,3 @@ public class ModifiedBinarySearchST<Value>{
         return s;
     }
 }
-public class Test{
-    static void Main(){
-        IComparable[] keys = {1, 3, 6, 8, 5, 9, 2};
-        int[] values = {34, 22, 4, 5, 32, 55, 6};
-        ArrayST<int> arrayST = new ArrayST<int>(50);
-        arrayST.Put(1, 10);
-        arrayST.Put(2, 3);
-        arrayST.Put(3, 24);
-        Console.WriteLine(arrayST.Get(3));
-    }
-}
