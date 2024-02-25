@@ -260,6 +260,24 @@ public class ModifiedBST<Value>: BST<Value>{
 
         return leftNoDuplicated && rightNoDuplicated;
     }
+    public void PrintInLine(){
+        PrintInLine(root);
+    }
+
+    private void PrintInLine(Node? root)
+    {
+        if(root == null) return;
+        Queue<Node> modifiedBSTs = new Queue<Node>();
+        modifiedBSTs.Enqueue(root);
+
+        while(modifiedBSTs.Count != 0){
+            Node? node = modifiedBSTs.Dequeue();
+            Console.Write(node.key + " ");
+
+            if(node.left != null) modifiedBSTs.Enqueue(node.left);
+            if(node.right != null) modifiedBSTs.Enqueue(node.right);
+        }
+    }
 
     private Node? Max(Node? root)
     {
@@ -339,12 +357,5 @@ public class Test{
         Console.Write(ints[mid] + " ");
         BinaryInsert(ints, modifiedBST, low, mid - 1);
         BinaryInsert(ints, modifiedBST, mid + 1, high);
-    }
-
-    static void Main(){
-        IComparable[] keys = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        ModifiedBST<int> bST = new ModifiedBST<int>(keys, values);
-        Console.WriteLine(bST.hasNoDuplicated());
     }
 }
