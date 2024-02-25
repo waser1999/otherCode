@@ -14,7 +14,17 @@ public class BST<Value>
         }
     }
     protected Node? root;
+    protected Node? cache;
+    
+    public BST(){
 
+    }
+    public BST(IComparable[] keys, Value[] values){
+        int length = Math.Min(keys.Length, values.Length);
+        for(int i = 0; i < length; i++){
+            Put(keys[i], values[i]);
+        }
+    }
     public virtual int Size(){
         return Size(root);
     }
@@ -26,10 +36,15 @@ public class BST<Value>
         return root == null;
     }
     public virtual void Put(IComparable key, Value value){
+        if(cache != null && cache.key.Equals(key)) cache.value = value;
         root = Put(key, value, root);
     }
     private Node? Put(IComparable key, Value value, Node? root){
-        if(root == null) return new Node(key, value, 1, 1);
+        if(root == null) {
+            Node? node = new Node(key, value, 1, 1);
+            cache = node;
+            return node;
+        }
         int cmp = root.key.CompareTo(key);
         if(cmp > 0){
             root.left = Put(key, value, root.left);
@@ -37,13 +52,16 @@ public class BST<Value>
             root.right = Put(key, value, root.right);
         }else{
             root.value = value;
+            cache = root;
         }
         root.N = Size(root.left) + Size(root.right) + 1;
         return root;
     }
     public virtual Value? Get(IComparable key){
+        if(cache != null && cache.key.Equals(key)) return cache.value;
         Node? x = Get(key, root);
         if(x == null) return default(Value);
+        cache = x;
         return x.value;
     }
     private Node? Get(IComparable key, Node? root){
@@ -176,6 +194,12 @@ public class BST<Value>
     }
 }
 public class ModifiedBST<Value>: BST<Value>{
+    public ModifiedBST(IComparable[] keys, Value[] values){
+        int length = Math.Min(keys.Length, values.Length);
+        for(int i = 0; i < length; i++){
+            Put(keys[i], values[i]);
+        }
+    }
     public override int Size()
     {
         return Size(root);
@@ -186,6 +210,57 @@ public class ModifiedBST<Value>: BST<Value>{
         if(root == null) return 0;
         return Size(root.left) + Size(root.right) + 1;
     }
+    public bool isBinaryTree(){
+        return Size() == base.Size();
+    }
+    public bool isOrdered(int min, int max){
+        return isOrdered(root, min, max);
+    }
+
+    private bool isOrdered(Node? root, int min, int max)
+    {
+        bool leftOrdered = true;
+        bool rightOrdered = true;
+
+        if(root == null) return true;
+
+        if(root.left != null){
+            if(root.left.key.CompareTo(min) >= 0 && root.left.key.CompareTo(root.key) < 0){
+                leftOrdered = leftOrdered && isOrdered(root.left, min, max);
+            }else{
+                leftOrdered = false;
+            }
+        }
+
+        if(root.right != null){
+            if(root.right != null && root.right.key.CompareTo(max) <= 0 && root.right.key.CompareTo(root.key) > 0){
+                rightOrdered = rightOrdered && isOrdered(root.right, min, max);
+            }else{
+                rightOrdered = false;
+            }
+        }
+        
+        return leftOrdered && rightOrdered;
+    }
+    public bool hasNoDuplicated(){
+        return hasNoDuplicated(root);
+    }
+
+    private bool hasNoDuplicated(Node? root)
+    {
+        if(root == null) return true;
+        bool leftNoDuplicated = true;
+        bool rightNoDuplicated = true;
+        
+        if(root.left != null && root.left.key.Equals(root.key)) leftNoDuplicated = false;
+        if(root.right != null && root.right.key.Equals(root.key)) rightNoDuplicated = false;
+
+        leftNoDuplicated = leftNoDuplicated && hasNoDuplicated(root.left);
+        rightNoDuplicated = rightNoDuplicated && hasNoDuplicated(root.right);
+
+        return leftNoDuplicated && rightNoDuplicated;
+    }
+
     private Node? Max(Node? root)
     {
         if(root == null) return null;
@@ -251,13 +326,25 @@ public class ModifiedBST<Value>: BST<Value>{
     }
 }
 public class Test{
+    public static void BinaryInsert(int[] ints, ModifiedBST<int> modifiedBST){
+        Array.Sort(ints);
+        BinaryInsert(ints, modifiedBST, 0, ints.Length - 1);
+    }
+
+    private static void BinaryInsert(int[] ints, ModifiedBST<int> modifiedBST, int low, int high)
+    {
+        if(low > high) return;
+        int mid = low + (high - low) / 2;
+        modifiedBST.Put(ints[mid], ints[mid]);
+        Console.Write(ints[mid] + " ");
+        BinaryInsert(ints, modifiedBST, low, mid - 1);
+        BinaryInsert(ints, modifiedBST, mid + 1, high);
+    }
+
     static void Main(){
-        ModifiedBST<int> bST = new ModifiedBST<int>();
-        bST.Put(2, 10);
-        bST.Put(1, 8);
-        bST.Put(3, 25);
-        bST.Put(-4, 9);
-        bST.Put(0, 2);
-        Console.WriteLine(bST.Rank(-4));
+        IComparable[] keys = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        ModifiedBST<int> bST = new ModifiedBST<int>(keys, values);
+        Console.WriteLine(bST.hasNoDuplicated());
     }
 }
