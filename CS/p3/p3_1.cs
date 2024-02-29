@@ -74,10 +74,14 @@ public class SequentialSearchST<Value>: IEnumerable<Value?>
         if(head == null){
             head = new Node(index, value, head);
             N++;
+            return;
         }
 
         for(Node node = head; node != null; node = node.next){
-            if(index.Equals(node.index)) node.value = value;
+            if(index.Equals(node.index)){
+                node.value = value;
+                return;
+            } 
         }
 
         head = new Node(index, value, head);
