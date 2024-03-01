@@ -1,0 +1,35 @@
+#open-source{
+    color: brown;
+}
+
+.privacy{
+    color: violet;
+}
+
+a[href]{
+    color: brown;
+}
+
+html{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #212121;
+}
+
+body{
+    width: 600px;
+    margin: 0 auto;
+    padding: 0 20px 20px 20px;
+    border: 5px solid white;
+    color: azure;
+}
+
+h1{
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+img{
+    display: block;
+    width: 300px;
+    margin: 0 auto;
+}
