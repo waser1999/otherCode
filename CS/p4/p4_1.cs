@@ -206,18 +206,57 @@ public class CC{
     }
 }
 public class GraphProperties{
+    private int[] eccentricities;
+    private int maxE = 0;
+    //设一个数为最大值
+    private int minE = int.MaxValue;
+    private int center;
+
     public GraphProperties(Graph graph){
         CC cC = new CC(graph);
+        eccentricities = new int[graph.V()];
 
         if(cC.Count() != 1) throw new Exception("Not a connected graph");
+        GetAllEccentricity(graph);
     }
 
+    private void GetAllEccentricity(Graph graph)
+    {
+        for(int vertax = 0; vertax < graph.V(); vertax++){
+            BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph, vertax);
+            for(int root = 0; root < graph.V(); root++){
+                if(root == vertax) continue;
+                
+                eccentricities[vertax] = Math.Max(eccentricities[vertax], breadthFirstSearch.DistTo(root));
+            }
+
+            if(eccentricities[vertax] > maxE) maxE = eccentricities[vertax];
+            if(eccentricities[vertax] < minE){
+                minE = eccentricities[vertax];
+                center = vertax;
+            }
+        }
+    }
+    public int Eccentricity(int v){
+        return eccentricities[v];
+    }
+    public int Diameter(){
+        return maxE;
+    }
+    public int Radius(){
+        return minE;
+    }
+    public int Center(){
+        return center;
+    }
 }
+
 class T1{
     static void Main(){
-        FileInfo file = new FileInfo("D:\\waser\\Documents\\Program\\otherCode\\CS\\p4\\symbolTable");
-        Graph graph = new Graph(file, 13);
+        FileInfo file = new FileInfo("D:\\waser\\Documents\\Program\\otherCode\\CS\\p4\\graph");
+        Graph graph = new Graph(file);
         BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph, 0);
-        Console.WriteLine(breadthFirstSearch.DistTo(3));
+        GraphProperties graphProperties = new GraphProperties(graph);
+        Console.WriteLine(graphProperties.Diameter());
     }
 }
