@@ -222,18 +222,18 @@ public class GraphProperties{
 
     private void GetAllEccentricity(Graph graph)
     {
-        for(int vertax = 0; vertax < graph.V(); vertax++){
-            BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph, vertax);
+        for(int vertex = 0; vertex < graph.V(); vertex++){
+            BreadthFirstSearch breadthFirstSearch = new BreadthFirstSearch(graph, vertex);
             for(int root = 0; root < graph.V(); root++){
-                if(root == vertax) continue;
+                if(root == vertex) continue;
                 
-                eccentricities[vertax] = Math.Max(eccentricities[vertax], breadthFirstSearch.DistTo(root));
+                eccentricities[vertex] = Math.Max(eccentricities[vertex], breadthFirstSearch.DistTo(root));
             }
 
-            if(eccentricities[vertax] > maxE) maxE = eccentricities[vertax];
-            if(eccentricities[vertax] < minE){
-                minE = eccentricities[vertax];
-                center = vertax;
+            if(eccentricities[vertex] > maxE) maxE = eccentricities[vertex];
+            if(eccentricities[vertex] < minE){
+                minE = eccentricities[vertex];
+                center = vertex;
             }
         }
     }
