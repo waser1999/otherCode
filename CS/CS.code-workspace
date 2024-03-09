@@ -1,11 +1,4 @@
 {
-	"folders": [
-		{
-			"path": "."
-		},
-		{
-			"path": "../../algorithms-sedgewick-wayne"
-		}
-	],
+	"folders": [],
 	"settings": {}
 }
