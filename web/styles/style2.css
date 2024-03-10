@@ -1,0 +1,33 @@
+html{
+    background-color: aliceblue;
+}
+
+h1, h3{
+    color: purple;
+}
+
+p{
+    color: gray;
+}
+
+strong{
+    color: purple;
+}
+
+em{
+    color: black;
+}
+
+ul{
+    border: 2px solid purple;
+}
+
+ol{
+    border: 2px solid yellow;
+}
+
+ul, ol{
+    padding: 5px 20px;
+    border-radius: 4px;
+    width: 600px;
+}

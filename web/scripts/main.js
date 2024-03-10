@@ -18,9 +18,6 @@ myImage.onclick = function(){
 
 function query(){
     let name = prompt("Please input your name.");
-    if(!name){
-        query();
-    }
     localStorage.setItem("name", name);
     myHeading.textContent = "非常感谢！" + name;
 }
